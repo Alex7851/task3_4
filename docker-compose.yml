@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+  postgres_test:
+    container_name: postgres_test_cont
+    image: "postgres:15"
+    restart: 'no'
+    environment:
+      - POSTGRES_DB=version_db
+      - POSTGRES_USER=version_user
+      - POSTGRES_PASSWORD=version_password
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data    
+      - ./start_db_script:/docker-entrypoint-initdb.d/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+        tag: "{{.ImageName}}|{{.Name}}"
+        
+
+  mailutil:
+    build: ./mailutil
+    container_name: mailutil_cont
+    depends_on:
+      - postgres_test
+    restart: 'no'
+    tty: true
+ 
+  java11:
+    build: ./custom_service
+    container_name: java11_cont
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /tmpf
+      - /run/lock
+    # pid: host
+    # cgroup: host
+    #tty: true
+    # command: tail -f /dev/null

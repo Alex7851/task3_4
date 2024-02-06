@@ -1,0 +1,23 @@
+[Unit]
+Description=Simple app
+[Service]
+User=user-app
+Group=user-app-group
+# The configuration file application.properties should be here:
+
+#change this to your workspace
+WorkingDirectory=/usr/local/bin
+APP_OPTIONS=" -c /etc/default/app  "
+
+#path to executable. 
+#executable is a bash script which calls jar file
+ExecStart=/usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /usr/local/bin/looksdemo-3.13.1.jar $APP_OPTIONS
+Environment="/etc/default/app"
+
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

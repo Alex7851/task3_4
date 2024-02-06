@@ -1,0 +1,1 @@
+-Xms1024m -Xmx1024m -Djava.security.egd=file:/dev/./urandom -Djava.awt.headless=true -Djava.io.tmpdir=/tmp -Dspring.config.name=application
